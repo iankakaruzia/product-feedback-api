@@ -1,0 +1,10 @@
+pre-commit:
+  commands:
+    lint:
+      run: npm run lint {staged_files}
+      stage_fixed: true
+
+commit-msg:
+  commands:
+    'lint commit message':
+      run: npx --no-install commitlint --edit {1}
