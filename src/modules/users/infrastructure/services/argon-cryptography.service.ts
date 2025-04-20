@@ -1,4 +1,4 @@
-import { CryptographyService } from '@modules/user/domain/abstractions/cryptography.service';
+import { CryptographyService } from '@modules/users/domain/abstractions/cryptography.service';
 import * as argon2 from 'argon2';
 
 export class ArgonCryptographyService implements CryptographyService {

@@ -1,4 +1,4 @@
-import { JwtService } from '@modules/user/domain/abstractions/jwt.service';
+import { JwtService } from '@modules/users/domain/abstractions/jwt.service';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService as InternalJwtService } from '@nestjs/jwt';

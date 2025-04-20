@@ -1,12 +1,12 @@
-import { UserRepository } from '@modules/user/domain/abstractions/user.repository';
-import { User as UserEntity } from '@modules/user/domain/entities/user.entity';
+import { UsersRepository } from '@modules/users/domain/abstractions/users.repository';
+import { User as UserEntity } from '@modules/users/domain/entities/user.entity';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
 import { UserMappings } from './mappings/user.mappings';
 import { User } from './schemas/user.schema';
 
-export class MongoUserRepository implements UserRepository {
+export class MongoUsersRepository implements UsersRepository {
   constructor(
     @InjectModel(User.name) private readonly userModel: Model<User>,
   ) {}
@@ -15,10 +15,6 @@ export class MongoUserRepository implements UserRepository {
     const user = new this.userModel(entity);
 
     await user.save();
-  }
-
-  async delete(id: string): Promise<void> {
-    await this.userModel.deleteOne({ id });
   }
 
   async findByEmail(email: string): Promise<null | UserEntity> {

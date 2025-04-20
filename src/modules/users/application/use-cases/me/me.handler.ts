@@ -1,5 +1,5 @@
-import { UserRepository } from '@modules/user/domain/abstractions/user.repository';
-import { UserNotFoundError } from '@modules/user/domain/errors/user-not-found.error';
+import { UsersRepository } from '@modules/users/domain/abstractions/users.repository';
+import { UserNotFoundError } from '@modules/users/domain/errors/user-not-found.error';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 
 import { UserProfileDto } from '../../dtos/user-profile.dto';
@@ -7,7 +7,7 @@ import { MeQuery } from './me.query';
 
 @QueryHandler(MeQuery)
 export class MeHandler implements IQueryHandler<MeQuery> {
-  constructor(private readonly userRepository: UserRepository) {}
+  constructor(private readonly userRepository: UsersRepository) {}
 
   async execute(query: MeQuery): Promise<UserProfileDto> {
     const user = await this.userRepository.findById(query.id);

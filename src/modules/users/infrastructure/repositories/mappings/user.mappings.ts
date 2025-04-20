@@ -1,4 +1,4 @@
-import { User as UserEntity } from '@modules/user/domain/entities/user.entity';
+import { User as UserEntity } from '@modules/users/domain/entities/user.entity';
 
 import { User } from '../schemas/user.schema';
 

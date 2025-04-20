@@ -1,9 +1,9 @@
-import { CryptographyService } from '@modules/user/domain/abstractions/cryptography.service';
-import { JwtService } from '@modules/user/domain/abstractions/jwt.service';
-import { RefreshTokenRepository } from '@modules/user/domain/abstractions/refresh-token.repository';
-import { UserRepository } from '@modules/user/domain/abstractions/user.repository';
-import { RefreshToken } from '@modules/user/domain/entities/refresh-token.entity';
-import { User } from '@modules/user/domain/entities/user.entity';
+import { CryptographyService } from '@modules/users/domain/abstractions/cryptography.service';
+import { JwtService } from '@modules/users/domain/abstractions/jwt.service';
+import { RefreshTokensRepository } from '@modules/users/domain/abstractions/refresh-tokens.repository';
+import { UsersRepository } from '@modules/users/domain/abstractions/users.repository';
+import { RefreshToken } from '@modules/users/domain/entities/refresh-token.entity';
+import { User } from '@modules/users/domain/entities/user.entity';
 import { Logger } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
@@ -17,8 +17,8 @@ export class RegisterUserHandler
   private readonly logger = new Logger(RegisterUserHandler.name);
 
   constructor(
-    private readonly userRepository: UserRepository,
-    private readonly refreshTokenRepository: RefreshTokenRepository,
+    private readonly userRepository: UsersRepository,
+    private readonly refreshTokenRepository: RefreshTokensRepository,
     private readonly cryptography: CryptographyService,
     private readonly jwtService: JwtService,
   ) {}

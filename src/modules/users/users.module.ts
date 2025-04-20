@@ -10,10 +10,10 @@ import { RefreshUserHandler } from './application/use-cases/refresh/refresh-user
 import { RegisterUserHandler } from './application/use-cases/register/register-user.handler';
 import { CryptographyService } from './domain/abstractions/cryptography.service';
 import { JwtService } from './domain/abstractions/jwt.service';
-import { RefreshTokenRepository } from './domain/abstractions/refresh-token.repository';
-import { UserRepository } from './domain/abstractions/user.repository';
-import { MongoRefreshTokenRepository } from './infrastructure/repositories/mongo-refresh-token.repository';
-import { MongoUserRepository } from './infrastructure/repositories/mongo-user.repository';
+import { RefreshTokensRepository } from './domain/abstractions/refresh-tokens.repository';
+import { UsersRepository } from './domain/abstractions/users.repository';
+import { MongoRefreshTokensRepository } from './infrastructure/repositories/mongo-refresh-tokens.repository';
+import { MongoUsersRepository } from './infrastructure/repositories/mongo-users.repository';
 import {
   RefreshToken,
   RefreshTokenSchema,
@@ -24,10 +24,11 @@ import {
 } from './infrastructure/repositories/schemas/user.schema';
 import { ArgonCryptographyService } from './infrastructure/services/argon-cryptography.service';
 import { NestJwtService } from './infrastructure/services/nest-jwt.service';
-import { UserController } from './user.controller';
+import { AuthController } from './presentation/controllers/auth.controller';
+import { UsersController } from './presentation/controllers/users.controller';
 
 @Module({
-  controllers: [UserController],
+  controllers: [UsersController, AuthController],
   imports: [
     CqrsModule,
     ConfigModule,
@@ -55,12 +56,12 @@ import { UserController } from './user.controller';
       useClass: NestJwtService,
     },
     {
-      provide: UserRepository,
-      useClass: MongoUserRepository,
+      provide: UsersRepository,
+      useClass: MongoUsersRepository,
     },
     {
-      provide: RefreshTokenRepository,
-      useClass: MongoRefreshTokenRepository,
+      provide: RefreshTokensRepository,
+      useClass: MongoRefreshTokensRepository,
     },
     RegisterUserHandler,
     LoginUserHandler,
@@ -68,4 +69,4 @@ import { UserController } from './user.controller';
     RefreshUserHandler,
   ],
 })
-export class UserModule {}
+export class UsersModule {}
