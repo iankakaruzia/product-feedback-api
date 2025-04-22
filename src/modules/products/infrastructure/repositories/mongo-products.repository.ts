@@ -51,9 +51,14 @@ export class MongoProductsRepository implements ProductsRepository {
     const sortOrder = args.sortOrder ?? 'asc';
     const offset = args.offset ?? 0;
     const limit = args.limit ?? 10;
+    const search = args.search ?? '';
 
     const products = await this.productModel
       .find({
+        $or: [
+          { title: new RegExp(search, 'i') },
+          { description: new RegExp(search, 'i') },
+        ],
         ownerId: args.ownerId,
       })
       .sort({ createdAt: sortOrder })
@@ -61,6 +66,10 @@ export class MongoProductsRepository implements ProductsRepository {
       .limit(limit);
 
     const total = await this.productModel.countDocuments({
+      $or: [
+        { title: new RegExp(search, 'i') },
+        { description: new RegExp(search, 'i') },
+      ],
       ownerId: args.ownerId,
     });
 

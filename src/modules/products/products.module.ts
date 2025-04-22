@@ -4,6 +4,7 @@ import { CqrsModule } from '@nestjs/cqrs';
 import { MongooseModule } from '@nestjs/mongoose';
 
 import { CreateProductHandler } from './application/use-cases/create/create-product.handler';
+import { GetProductsHandler } from './application/use-cases/get/get-products.handler';
 import { ProductsRepository } from './domain/abstractions/products.repository';
 import { MongoProductsRepository } from './infrastructure/repositories/mongo-products.repository';
 import {
@@ -25,6 +26,7 @@ import { ProductsController } from './presentation/controllers/products.controll
       useClass: MongoProductsRepository,
     },
     CreateProductHandler,
+    GetProductsHandler,
   ],
 })
 export class ProductsModule {}

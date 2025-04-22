@@ -2,6 +2,7 @@ import { ProductsRepository } from '@modules/products/domain/abstractions/produc
 import { Product } from '@modules/products/domain/entities/product.entity';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
+import { ProductResponseDto } from '../../dtos/product-response.dto';
 import { CreateProductCommand } from './create-product.command';
 
 @CommandHandler(CreateProductCommand)
@@ -10,7 +11,7 @@ export class CreateProductHandler
 {
   constructor(private readonly productsRepository: ProductsRepository) {}
 
-  async execute(command: CreateProductCommand): Promise<Product> {
+  async execute(command: CreateProductCommand): Promise<ProductResponseDto> {
     const product = Product.create(
       command.title,
       command.description,
@@ -19,6 +20,6 @@ export class CreateProductHandler
 
     await this.productsRepository.create(product);
 
-    return product;
+    return ProductResponseDto.fromEntity(product);
   }
 }
