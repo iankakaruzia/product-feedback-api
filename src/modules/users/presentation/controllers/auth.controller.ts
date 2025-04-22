@@ -15,19 +15,19 @@ import { LoginDto } from '../dtos/login.dto';
 import { RefreshDto } from '../dtos/refresh.dto';
 import { RegisterDto } from '../dtos/register.dto';
 
+@ApiBadRequestResponse({
+  description: 'Invalid data',
+  type: HttpExceptionResponse,
+})
+@ApiCreatedResponse({ type: AccessTokenDto })
+@ApiForbiddenResponse({
+  description: 'Invalid credentials',
+  type: HttpExceptionResponse,
+})
 @Controller('auth')
 export class AuthController {
   constructor(private readonly commandBus: CommandBus) {}
 
-  @ApiBadRequestResponse({
-    description: 'Invalid data',
-    type: HttpExceptionResponse,
-  })
-  @ApiCreatedResponse({ type: AccessTokenDto })
-  @ApiForbiddenResponse({
-    description: 'Invalid credentials',
-    type: HttpExceptionResponse,
-  })
   @Post('login')
   login(@Body() loginDto: LoginDto) {
     return this.commandBus.execute<LoginUserCommand, AccessTokenDto>(
@@ -35,15 +35,6 @@ export class AuthController {
     );
   }
 
-  @ApiBadRequestResponse({
-    description: 'Invalid data',
-    type: HttpExceptionResponse,
-  })
-  @ApiCreatedResponse({ type: AccessTokenDto })
-  @ApiForbiddenResponse({
-    description: 'Invalid credentials',
-    type: HttpExceptionResponse,
-  })
   @Post('refresh')
   refresh(@Body() refreshDto: RefreshDto) {
     return this.commandBus.execute<RefreshUserCommand, AccessTokenDto>(
@@ -51,15 +42,6 @@ export class AuthController {
     );
   }
 
-  @ApiBadRequestResponse({
-    description: 'Invalid data',
-    type: HttpExceptionResponse,
-  })
-  @ApiCreatedResponse({ type: AccessTokenDto })
-  @ApiForbiddenResponse({
-    description: 'Invalid credentials',
-    type: HttpExceptionResponse,
-  })
   @Post('register')
   register(@Body() registerDto: RegisterDto) {
     return this.commandBus.execute<RegisterUserCommand, AccessTokenDto>(

@@ -1,5 +1,7 @@
 import { CorrelationIdMiddleware } from '@common/infrastructure/middlewares/correlation-id.middleware';
 import { CorrelationIdService } from '@common/infrastructure/services/correlation-id.service';
+import { AuthModule } from '@modules/auth/auth.module';
+import { ProductsModule } from '@modules/products/products.module';
 import { UsersModule } from '@modules/users/users.module';
 import {
   MiddlewareConsumer,
@@ -36,7 +38,9 @@ import { LoggerModule } from 'nestjs-pino';
             : undefined,
       },
     }),
+    AuthModule,
     UsersModule,
+    ProductsModule,
   ],
   providers: [CorrelationIdService],
 })

@@ -1,4 +1,4 @@
-import { JwtService } from '@modules/users/domain/abstractions/jwt.service';
+import { JwtService } from '@modules/auth/domain/abstractions/jwt.service';
 import { RefreshTokensRepository } from '@modules/users/domain/abstractions/refresh-tokens.repository';
 import { UsersRepository } from '@modules/users/domain/abstractions/users.repository';
 import { RefreshToken } from '@modules/users/domain/entities/refresh-token.entity';
