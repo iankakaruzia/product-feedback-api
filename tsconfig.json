@@ -21,5 +21,6 @@
       "@common/*": ["src/common/*"],
       "@modules/*": ["src/modules/*"]
     }
-  }
+  },
+  "exclude": [".container"]
 }
