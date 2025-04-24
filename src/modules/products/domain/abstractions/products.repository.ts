@@ -16,10 +16,10 @@ export type ProductsFindArgs = PaginatedQuery & {
 
 export abstract class ProductsRepository {
   abstract create(product: Product): Promise<void>;
-  abstract delete(args: ProductsArgs): Promise<null | void>;
+  abstract delete(product: Product): Promise<void>;
   abstract findById(args: ProductsArgs): Promise<null | Product>;
   abstract findPaginated(
     args: ProductsFindArgs,
   ): Promise<PaginatedResult<Product>>;
-  abstract update(product: Product): Promise<null | void>;
+  abstract update(product: Product): Promise<void>;
 }

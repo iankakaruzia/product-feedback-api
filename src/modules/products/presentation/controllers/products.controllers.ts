@@ -4,13 +4,17 @@ import { AuthGuard } from '@modules/auth/presentation/guards/auth.guard';
 import { PaginatedProductResponseDto } from '@modules/products/application/dtos/paginated-product-response.dto';
 import { ProductResponseDto } from '@modules/products/application/dtos/product-response.dto';
 import { CreateProductCommand } from '@modules/products/application/use-cases/create/create-product.command';
+import { DeleteProductCommand } from '@modules/products/application/use-cases/delete/delete-product.command';
 import { GetProductByIdQuery } from '@modules/products/application/use-cases/get-by-id/get-product-by-id.query';
 import { GetProductsQuery } from '@modules/products/application/use-cases/get/get-products.query';
 import { Product } from '@modules/products/domain/entities/product.entity';
 import {
   Body,
   Controller,
+  Delete,
   Get,
+  HttpCode,
+  HttpStatus,
   Param,
   Post,
   Query,
@@ -20,6 +24,7 @@ import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { IsObjectIdPipe } from '@nestjs/mongoose';
 import {
   ApiBearerAuth,
+  ApiNoContentResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiUnauthorizedResponse,
@@ -52,6 +57,22 @@ export class ProductsController {
         createProductDto.description,
         userId,
       ),
+    );
+  }
+
+  @ApiNoContentResponse({ description: 'Product deleted' })
+  @ApiNotFoundResponse({
+    description: 'Product not found',
+    type: HttpExceptionResponse,
+  })
+  @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async deleteProductById(
+    @UserId() userId: string,
+    @Param('id', new IsObjectIdPipe()) id: string,
+  ) {
+    return this.commandBus.execute<DeleteProductCommand, void>(
+      new DeleteProductCommand(userId, id),
     );
   }
 

@@ -25,15 +25,11 @@ export class MongoProductsRepository implements ProductsRepository {
     });
   }
 
-  async delete(args: ProductsArgs): Promise<null | void> {
-    const product = await this.productModel.findOneAndDelete({
-      _id: MongoMappings.toObjectId(args.id),
-      owner: args.ownerId,
+  async delete(product: ProductEntity): Promise<void> {
+    await this.productModel.deleteOne({
+      _id: MongoMappings.toObjectId(product.id),
+      owner: MongoMappings.toObjectId(product.ownerId),
     });
-
-    if (!product) {
-      return null;
-    }
   }
 
   async findById(args: ProductsArgs): Promise<null | ProductEntity> {
@@ -88,8 +84,8 @@ export class MongoProductsRepository implements ProductsRepository {
     };
   }
 
-  async update(product: ProductEntity): Promise<null | void> {
-    const updatedProduct = await this.productModel.findOneAndUpdate(
+  async update(product: ProductEntity): Promise<void> {
+    await this.productModel.updateOne(
       {
         _id: MongoMappings.toObjectId(product.id),
         owner: MongoMappings.toObjectId(product.ownerId),
@@ -99,9 +95,5 @@ export class MongoProductsRepository implements ProductsRepository {
         new: true,
       },
     );
-
-    if (!updatedProduct) {
-      return null;
-    }
   }
 }
