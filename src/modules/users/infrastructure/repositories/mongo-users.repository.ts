@@ -1,3 +1,4 @@
+import { MongoMappings } from '@common/infrastructure/repositories/mongo.mappings';
 import { UsersRepository } from '@modules/users/domain/abstractions/users.repository';
 import { User as UserEntity } from '@modules/users/domain/entities/user.entity';
 import { InjectModel } from '@nestjs/mongoose';
@@ -12,7 +13,10 @@ export class MongoUsersRepository implements UsersRepository {
   ) {}
 
   async create(entity: UserEntity): Promise<void> {
-    const user = new this.userModel(entity);
+    const user = new this.userModel({
+      ...entity,
+      _id: MongoMappings.toObjectId(entity.id),
+    });
 
     await user.save();
   }
@@ -24,22 +28,29 @@ export class MongoUsersRepository implements UsersRepository {
       return null;
     }
 
-    return UserMappings.toDomain(user.toObject());
+    return UserMappings.toDomain(user);
   }
 
   async findById(id: string): Promise<null | UserEntity> {
-    const user = await this.userModel.findOne({ id });
+    const user = await this.userModel.findOne({
+      _id: MongoMappings.toObjectId(id),
+    });
 
     if (!user) {
       return null;
     }
 
-    return UserMappings.toDomain(user.toObject());
+    return UserMappings.toDomain(user);
   }
 
   async update(entity: UserEntity): Promise<void> {
-    await this.userModel.findOneAndUpdate({ id: entity.id }, entity, {
-      new: true,
-    });
+    const { id, ...entityToUpdate } = entity;
+    await this.userModel.findOneAndUpdate(
+      { _id: MongoMappings.toObjectId(id) },
+      entityToUpdate,
+      {
+        new: true,
+      },
+    );
   }
 }

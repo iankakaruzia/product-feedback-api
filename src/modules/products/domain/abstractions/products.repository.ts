@@ -21,5 +21,5 @@ export abstract class ProductsRepository {
   abstract findPaginated(
     args: ProductsFindArgs,
   ): Promise<PaginatedResult<Product>>;
-  abstract update(product: Product): Promise<void>;
+  abstract update(product: Product): Promise<null | void>;
 }

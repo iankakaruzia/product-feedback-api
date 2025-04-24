@@ -17,6 +17,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
+import { IsObjectIdPipe } from '@nestjs/mongoose';
 import {
   ApiBearerAuth,
   ApiNotFoundResponse,
@@ -59,7 +60,10 @@ export class ProductsController {
     type: HttpExceptionResponse,
   })
   @Get(':id')
-  async getProductById(@UserId() userId: string, @Param('id') id: string) {
+  async getProductById(
+    @UserId() userId: string,
+    @Param('id', new IsObjectIdPipe()) id: string,
+  ) {
     return this.queryBus.execute<GetProductsQuery, ProductResponseDto>(
       new GetProductByIdQuery(userId, id),
     );

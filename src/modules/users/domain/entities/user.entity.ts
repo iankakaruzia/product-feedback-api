@@ -1,5 +1,5 @@
 import { Entity } from '@common/domain/entities/entity';
-import { createId } from '@paralleldrive/cuid2';
+import { Types } from 'mongoose';
 
 export class User extends Entity {
   email: string;
@@ -11,7 +11,7 @@ export class User extends Entity {
     user.email = email;
     user.name = name;
     user.password = password;
-    user.id = createId();
+    user.id = new Types.ObjectId().toHexString();
     user.createdAt = new Date();
 
     return user;

@@ -1,5 +1,5 @@
 import { Entity } from '@common/domain/entities/entity';
-import { createId } from '@paralleldrive/cuid2';
+import { Types } from 'mongoose';
 
 export class Product extends Entity {
   description: string;
@@ -15,7 +15,7 @@ export class Product extends Entity {
     product.title = title;
     product.description = description;
     product.ownerId = ownerId;
-    product.id = createId();
+    product.id = new Types.ObjectId().toHexString();
     product.createdAt = new Date();
 
     return product;

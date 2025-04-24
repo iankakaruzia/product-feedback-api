@@ -1,4 +1,5 @@
 import { PaginatedResult } from '@common/domain/interfaces/pagination.interface';
+import { MongoMappings } from '@common/infrastructure/repositories/mongo.mappings';
 import {
   ProductsArgs,
   ProductsFindArgs,
@@ -8,6 +9,7 @@ import { Product as ProductEntity } from '@modules/products/domain/entities/prod
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
+import { ProductMappings } from './mappings/product.mappings';
 import { Product } from './schemas/product.schema';
 
 export class MongoProductsRepository implements ProductsRepository {
@@ -16,33 +18,35 @@ export class MongoProductsRepository implements ProductsRepository {
   ) {}
 
   async create(product: ProductEntity): Promise<void> {
-    await this.productModel.create(product);
+    await this.productModel.create({
+      ...product,
+      _id: MongoMappings.toObjectId(product.id),
+      owner: MongoMappings.toObjectId(product.ownerId),
+    });
   }
 
   async delete(args: ProductsArgs): Promise<null | void> {
-    const product = await this.productModel.findOne({
-      id: args.id,
-      ownerId: args.ownerId,
+    const product = await this.productModel.findOneAndDelete({
+      _id: MongoMappings.toObjectId(args.id),
+      owner: args.ownerId,
     });
 
     if (!product) {
       return null;
     }
-
-    await product.deleteOne();
   }
 
   async findById(args: ProductsArgs): Promise<null | ProductEntity> {
     const product = await this.productModel.findOne({
-      id: args.id,
-      ownerId: args.ownerId,
+      _id: MongoMappings.toObjectId(args.id),
+      owner: MongoMappings.toObjectId(args.ownerId),
     });
 
     if (!product) {
       return null;
     }
 
-    return product.toObject();
+    return ProductMappings.toDomain(product);
   }
 
   async findPaginated(
@@ -59,7 +63,7 @@ export class MongoProductsRepository implements ProductsRepository {
           { title: new RegExp(search, 'i') },
           { description: new RegExp(search, 'i') },
         ],
-        ownerId: args.ownerId,
+        owner: MongoMappings.toObjectId(args.ownerId),
       })
       .sort({ createdAt: sortOrder })
       .skip(offset)
@@ -70,27 +74,34 @@ export class MongoProductsRepository implements ProductsRepository {
         { title: new RegExp(search, 'i') },
         { description: new RegExp(search, 'i') },
       ],
-      ownerId: args.ownerId,
+      owner: MongoMappings.toObjectId(args.ownerId),
     });
 
     return {
       currentPage: offset / limit,
       hasNextPage: offset + limit < total,
       hasPreviousPage: offset > 0,
-      items: products.map((product) => product.toObject()),
+      items: products.map((product) => ProductMappings.toDomain(product)),
       pageSize: limit,
       total,
       totalPages: Math.ceil(total / limit),
     };
   }
 
-  async update(product: ProductEntity): Promise<void> {
-    await this.productModel.findOneAndUpdate(
-      { id: product.id, ownerId: product.ownerId },
+  async update(product: ProductEntity): Promise<null | void> {
+    const updatedProduct = await this.productModel.findOneAndUpdate(
+      {
+        _id: MongoMappings.toObjectId(product.id),
+        owner: MongoMappings.toObjectId(product.ownerId),
+      },
       product,
       {
         new: true,
       },
     );
+
+    if (!updatedProduct) {
+      return null;
+    }
   }
 }
