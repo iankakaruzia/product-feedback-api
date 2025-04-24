@@ -1,10 +1,9 @@
-import { Optional } from '@nestjs/common';
-import { IsNotEmpty, MinLength } from 'class-validator';
+import { IsNotEmpty, IsOptional, MinLength } from 'class-validator';
 
 export class CreateProductDto {
   @IsNotEmpty()
+  @IsOptional()
   @MinLength(3)
-  @Optional()
   description: string;
 
   @IsNotEmpty()

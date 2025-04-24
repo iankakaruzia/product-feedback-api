@@ -7,6 +7,7 @@ import { CreateProductHandler } from './application/use-cases/create/create-prod
 import { DeleteProductHandler } from './application/use-cases/delete/delete-product.handler';
 import { GetProductByIdHandler } from './application/use-cases/get-by-id/get-product-by-id.handler';
 import { GetProductsHandler } from './application/use-cases/get/get-products.handler';
+import { UpdateProductHandler } from './application/use-cases/update/update-product.handler';
 import { ProductsRepository } from './domain/abstractions/products.repository';
 import { MongoProductsRepository } from './infrastructure/repositories/mongo-products.repository';
 import {
@@ -31,6 +32,7 @@ import { ProductsController } from './presentation/controllers/products.controll
     GetProductsHandler,
     GetProductByIdHandler,
     DeleteProductHandler,
+    UpdateProductHandler,
   ],
 })
 export class ProductsModule {}

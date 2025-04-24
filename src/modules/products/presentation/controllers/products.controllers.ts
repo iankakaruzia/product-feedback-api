@@ -7,6 +7,7 @@ import { CreateProductCommand } from '@modules/products/application/use-cases/cr
 import { DeleteProductCommand } from '@modules/products/application/use-cases/delete/delete-product.command';
 import { GetProductByIdQuery } from '@modules/products/application/use-cases/get-by-id/get-product-by-id.query';
 import { GetProductsQuery } from '@modules/products/application/use-cases/get/get-products.query';
+import { UpdateProductCommand } from '@modules/products/application/use-cases/update/update-product.command';
 import { Product } from '@modules/products/domain/entities/product.entity';
 import {
   Body,
@@ -16,6 +17,7 @@ import {
   HttpCode,
   HttpStatus,
   Param,
+  Patch,
   Post,
   Query,
   UseGuards,
@@ -32,6 +34,7 @@ import {
 
 import { CreateProductDto } from '../dtos/create-product.dto';
 import { GetProductsQueryParamsDto } from '../dtos/get-products-query-params.dto';
+import { UpdateProductDto } from '../dtos/update-product.dto';
 
 @ApiBearerAuth()
 @ApiUnauthorizedResponse({
@@ -103,6 +106,29 @@ export class ProductsController {
         query.offset,
         query.search,
         query.sortOrder,
+      ),
+    );
+  }
+
+  @ApiNoContentResponse({ description: 'Product updated' })
+  @ApiNotFoundResponse({
+    description: 'Product not found',
+    type: HttpExceptionResponse,
+  })
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @Patch(':id')
+  async updateProductById(
+    @UserId() userId: string,
+    @Param('id', new IsObjectIdPipe()) id: string,
+    @Body() updateProductDto: UpdateProductDto,
+  ) {
+    console.log({ updateProductDto });
+    return this.commandBus.execute<UpdateProductCommand, void>(
+      new UpdateProductCommand(
+        userId,
+        id,
+        updateProductDto.title,
+        updateProductDto.description,
       ),
     );
   }
