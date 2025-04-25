@@ -4,10 +4,8 @@ import { Types } from 'mongoose';
 @Schema()
 export class User {
   @Prop({
-    index: true,
     required: true,
     type: Types.ObjectId,
-    unique: true,
   })
   _id: number;
 

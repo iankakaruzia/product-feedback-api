@@ -21,13 +21,8 @@ export class GetProductsHandler implements IQueryHandler<GetProductsQuery> {
     });
 
     return {
-      currentPage: products.currentPage,
-      hasNextPage: products.hasNextPage,
-      hasPreviousPage: products.hasPreviousPage,
       items: products.items.map((item) => ProductResponseDto.fromEntity(item)),
-      pageSize: products.pageSize,
-      total: products.total,
-      totalPages: products.totalPages,
+      metadata: products.metadata,
     };
   }
 }

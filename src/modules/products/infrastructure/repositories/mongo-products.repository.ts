@@ -74,13 +74,15 @@ export class MongoProductsRepository implements ProductsRepository {
     });
 
     return {
-      currentPage: offset / limit,
-      hasNextPage: offset + limit < total,
-      hasPreviousPage: offset > 0,
       items: products.map((product) => ProductMappings.toDomain(product)),
-      pageSize: limit,
-      total,
-      totalPages: Math.ceil(total / limit),
+      metadata: {
+        currentPage: offset / limit,
+        hasNextPage: offset + limit < total,
+        hasPreviousPage: offset > 0,
+        pageSize: limit,
+        total,
+        totalPages: Math.ceil(total / limit),
+      },
     };
   }
 
