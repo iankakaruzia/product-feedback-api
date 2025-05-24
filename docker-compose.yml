@@ -9,16 +9,3 @@ services:
       - ./.container/mongo/data:/data/db
     ports:
       - '27017:27017'
-
-  mongo-express:
-    image: mongo-express
-    restart: always
-    ports:
-      - 8081:8081
-    depends_on:
-      - mongo
-    environment:
-      ME_CONFIG_MONGODB_ADMINUSERNAME: root
-      ME_CONFIG_MONGODB_ADMINPASSWORD: MongoDB13!
-      ME_CONFIG_MONGODB_URL: mongodb://root:MongoDB13!@mongo:27017/
-      ME_CONFIG_BASICAUTH: false
