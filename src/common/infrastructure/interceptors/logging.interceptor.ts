@@ -19,14 +19,14 @@ export class LoggingInterceptor implements NestInterceptor {
 
     this.logger.log(`Processing request ${requestName}`);
 
-    return next
-      .handle()
-      .pipe(
-        tap(() =>
-          this.logger.log(
-            `Completed request ${requestName} in ${Date.now() - now}ms`,
-          ),
-        ),
-      );
+    return next.handle().pipe(
+      tap(() => {
+        const delayMs = Date.now() - now;
+        this.logger.log(`Completed request ${requestName} in ${delayMs}ms`, {
+          delayMs,
+          requestName,
+        });
+      }),
+    );
   }
 }

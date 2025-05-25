@@ -122,7 +122,6 @@ export class ProductsController {
     @Param('id', new IsObjectIdPipe()) id: string,
     @Body() updateProductDto: UpdateProductDto,
   ) {
-    console.log({ updateProductDto });
     return this.commandBus.execute<UpdateProductCommand, void>(
       new UpdateProductCommand(
         userId,

@@ -11,6 +11,7 @@ import { Request, Response } from 'express';
 
 import { defaultHttpErrors } from '../constants/http-errors.constant';
 import { IProblemDetail } from '../interfaces/http-exception';
+import { CORRELATION_ID_HEADER } from '../services/correlation-id.service';
 @Catch(HttpException)
 export class HttpExceptionFilter implements ExceptionFilter {
   private readonly logger = new Logger(HttpExceptionFilter.name);
@@ -44,7 +45,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
 
     const problemDetail: IProblemDetail = {
       correlationId:
-        (request.headers['x-correlation-id'] as string) || createId(),
+        (request.headers[CORRELATION_ID_HEADER] as string) || createId(),
       detail: detail,
       instance: request.url,
       status: status,

@@ -1,14 +1,23 @@
 import { Injectable, Scope } from '@nestjs/common';
+import { createId } from '@paralleldrive/cuid2';
+import { ClsService, ClsStore } from 'nestjs-cls';
+
+export const CORRELATION_ID_HEADER = 'x-correlation-id';
+export const CORRELATION_ID_KEY = 'correlationId';
+
+export interface CorrelationIdStore extends ClsStore {
+  correlationId: string;
+}
 
 @Injectable({ scope: Scope.REQUEST })
 export class CorrelationIdService {
-  private correlationId: string;
+  constructor(private readonly cls: ClsService<CorrelationIdStore>) {}
 
   getCorrelationId(): string {
-    return this.correlationId;
+    return this.cls.get(CORRELATION_ID_KEY) ?? createId();
   }
 
   setCorrelationId(correlationId: string): void {
-    this.correlationId = correlationId;
+    this.cls.set(CORRELATION_ID_KEY, correlationId);
   }
 }
