@@ -12,6 +12,7 @@ import { Request, Response } from 'express';
 import { defaultHttpErrors } from '../constants/http-errors.constant';
 import { IProblemDetail } from '../interfaces/http-exception';
 import { CORRELATION_ID_HEADER } from '../services/correlation-id.service';
+
 @Catch(HttpException)
 export class HttpExceptionFilter implements ExceptionFilter {
   private readonly logger = new Logger(HttpExceptionFilter.name);
